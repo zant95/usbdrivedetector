@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.samuelcampos.usbdrivedectector.process;
+package nl.shipcontrol.usbdrivedectector.process;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

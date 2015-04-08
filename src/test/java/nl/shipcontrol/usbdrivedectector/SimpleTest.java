@@ -1,7 +1,7 @@
-package net.samuelcampos.usbdrivedectector;
+package nl.shipcontrol.usbdrivedectector;
 
-import net.samuelcampos.usbdrivedectector.events.IUSBDriveListener;
-import net.samuelcampos.usbdrivedectector.events.USBStorageEvent;
+import nl.shipcontrol.usbdrivedectector.events.IUSBDriveListener;
+import nl.shipcontrol.usbdrivedectector.events.USBStorageEvent;
 
 /**
  *

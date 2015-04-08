@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.samuelcampos.usbdrivedectector;
+package nl.shipcontrol.usbdrivedectector;
 
-import net.samuelcampos.usbdrivedectector.detectors.AbstractStorageDeviceDetector;
-import net.samuelcampos.usbdrivedectector.events.DeviceEventType;
-import net.samuelcampos.usbdrivedectector.events.IUSBDriveListener;
-import net.samuelcampos.usbdrivedectector.events.USBStorageEvent;
+import nl.shipcontrol.usbdrivedectector.detectors.AbstractStorageDeviceDetector;
+import nl.shipcontrol.usbdrivedectector.events.DeviceEventType;
+import nl.shipcontrol.usbdrivedectector.events.IUSBDriveListener;
+import nl.shipcontrol.usbdrivedectector.events.USBStorageEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

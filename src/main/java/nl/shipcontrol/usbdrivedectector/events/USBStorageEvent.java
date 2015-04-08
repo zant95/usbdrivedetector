@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package net.samuelcampos.usbdrivedectector.events;
+package nl.shipcontrol.usbdrivedectector.events;
 
-import net.samuelcampos.usbdrivedectector.USBStorageDevice;
+import nl.shipcontrol.usbdrivedectector.USBStorageDevice;
 
 /**
  *

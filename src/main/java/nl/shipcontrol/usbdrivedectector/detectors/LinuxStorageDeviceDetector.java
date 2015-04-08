@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.samuelcampos.usbdrivedectector.detectors;
+package nl.shipcontrol.usbdrivedectector.detectors;
 
-import net.samuelcampos.usbdrivedectector.USBStorageDevice;
-import net.samuelcampos.usbdrivedectector.process.CommandLineExecutor;
+import nl.shipcontrol.usbdrivedectector.USBStorageDevice;
+import nl.shipcontrol.usbdrivedectector.process.CommandLineExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

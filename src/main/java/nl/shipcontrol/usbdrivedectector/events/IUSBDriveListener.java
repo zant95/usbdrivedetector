@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-package net.samuelcampos.usbdrivedectector.events;
+package nl.shipcontrol.usbdrivedectector.events;
 
 /**
- * Type of events that occur to USB Storage devices
- *
+ * Interface to implement by the classes who want to receive notifications when 
+ * there are devices Connected or Removed of the computer.
+ * 
  * @author samuelcampos
  */
-public enum DeviceEventType {
-    REMOVED,
-    CONNECTED
+public interface IUSBDriveListener {
+    
+    public void usbDriveEvent(USBStorageEvent event);
 }
