@@ -15,12 +15,13 @@
  */
 package net.samuelcampos.usbdrivedectector.detectors;
 
-import net.samuelcampos.usbdrivedectector.USBStorageDevice;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.File;
 import java.util.List;
+
+import net.samuelcampos.usbdrivedectector.USBStorageDevice;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class is prepared to:
@@ -33,58 +34,63 @@ import java.util.List;
  */
 public abstract class AbstractStorageDeviceDetector {
 
-    private static final Logger logger = LoggerFactory
-            .getLogger(AbstractStorageDeviceDetector.class);
+	private static final Logger logger = LoggerFactory.getLogger(AbstractStorageDeviceDetector.class);
 
-    private static final String OSName = System.getProperty("os.name")
-            .toLowerCase();
+	private static final String OSName = System.getProperty("os.name").toLowerCase();
 
-    // private static final String OSVersion = System.getProperty("os.version");
-    // private static final String OSArch = System.getProperty("os.arch");
-    /**
-     * {@link AbstractStorageDeviceDetector} instance. <br/>
-     * This instance is created (Thread-Safe) when the JVM loads the class.
-     */
-    private static final AbstractStorageDeviceDetector instance;
+	// private static final String OSVersion = System.getProperty("os.version");
+	// private static final String OSArch = System.getProperty("os.arch");
+	/**
+	 * {@link AbstractStorageDeviceDetector} instance. <br/>
+	 * This instance is created (Thread-Safe) when the JVM loads the class.
+	 */
+	private static final AbstractStorageDeviceDetector instance;
 
-    static {
-        if (OSName.startsWith("win")) {
-            instance = new WindowsStorageDeviceDetector();
-        } else if (OSName.startsWith("linux")) {
-            instance = new LinuxStorageDeviceDetector();
-        } else if (OSName.startsWith("mac")) {
-            instance = new OSXStorageDeviceDetector();
-        } else {
-            instance = null;
-        }
-    }
+	static {
+		if (OSName.startsWith("win")) {
+			instance = new WindowsStorageDeviceDetector();
+		} else
+			if (OSName.startsWith("linux")) {
+				instance = new LinuxStorageDeviceDetector();
+			} else
+				if (OSName.startsWith("mac")) {
+					instance = new OSXStorageDeviceDetector();
+				} else {
+					instance = null;
+				}
+	}
 
-    public static AbstractStorageDeviceDetector getInstance() {
-        if (instance == null) {
-            throw new UnsupportedOperationException("Your Operative System (" + OSName + ") is not supported!");
-        }
+	public static AbstractStorageDeviceDetector getInstance() {
+		if (instance == null) {
+			throw new UnsupportedOperationException("Your Operative System (" + OSName + ") is not supported!");
+		}
 
-        return instance;
-    }
+		return instance;
+	}
 
-    public AbstractStorageDeviceDetector() {
-    }
+	public AbstractStorageDeviceDetector() {
+	}
 
-    /**
-     * Returns the storage devices connected to the computer.
-     *
-     * @return the list of the USB storage devices
-     */
-    public abstract List<USBStorageDevice> getRemovableDevices();
+	/**
+	 * Returns the storage devices connected to the computer.
+	 *
+	 * @return the list of the USB storage devices
+	 */
+	public abstract List<USBStorageDevice> getRemovableDevices();
 
-    protected static void addUSBDevice(List<USBStorageDevice> listDevices, String rootPath) {
-        File root = new File(rootPath);
+	protected static void addUSBDevice(List<USBStorageDevice> listDevices, String rootPath) {
+		File root = new File(rootPath);
 
-        if (logger.isTraceEnabled()) {
-            logger.trace("Device found: " + root.getPath());
-        }
+		if (logger.isTraceEnabled()) {
+			logger.trace("Device found: " + root.getPath());
+		}
 
-        USBStorageDevice device = new USBStorageDevice(root);
-        listDevices.add(device);
-    }
+		try {
+			USBStorageDevice device = new USBStorageDevice(root);
+			listDevices.add(device);
+		} catch (Exception e) {
+			logger.warn("Cannot access device \"" + root.getPath() + "\"");
+		}
+
+	}
 }

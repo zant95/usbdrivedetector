@@ -33,79 +33,78 @@ import java.util.regex.Pattern;
  */
 public class LinuxStorageDeviceDetector extends AbstractStorageDeviceDetector {
 
-    private static final Logger logger = LoggerFactory
-            .getLogger(LinuxStorageDeviceDetector.class);
+	private static final Logger logger = LoggerFactory.getLogger(LinuxStorageDeviceDetector.class);
 
-    private static final String linuxDetectUSBCommand1 = "df";
-    private static final Pattern command1Pattern = Pattern.compile("^(\\/[^ ]+)[^%]+%[ ]+(.+)$");
-    private static final String linuxDetectUSBCommand2 = "udevadm info -q property -n ";
-    private static final String strDeviceVerifier = "ID_USB_DRIVER=usb-storage";
+	private static final String linuxDetectUSBCommand1 = "df";
+	private static final Pattern command1Pattern = Pattern.compile("^(\\/[^ ]+)[^%]+%[ ]+(.+)$");
+	private static final String linuxDetectUSBCommand2 = "udevadm info -q property -n ";
+	private static final String strDeviceVerifier = "ID_USB_DRIVER=usb-storage";
 
-    private final CommandLineExecutor commandExecutor1, commandExecutor2;
+	private final CommandLineExecutor commandExecutor1, commandExecutor2;
 
-    public LinuxStorageDeviceDetector() {
-        super();
+	public LinuxStorageDeviceDetector() {
+		super();
 
-        commandExecutor1 = new CommandLineExecutor();
-        commandExecutor2 = new CommandLineExecutor();
-    }
+		commandExecutor1 = new CommandLineExecutor();
+		commandExecutor2 = new CommandLineExecutor();
+	}
 
-    private boolean isUSBStorage(String device) {
-        String verifyCommand = linuxDetectUSBCommand2 + device;
+	private boolean isUSBStorage(String device) {
+		String verifyCommand = linuxDetectUSBCommand2 + device;
 
-        try {
-            commandExecutor2.executeCommand(verifyCommand);
+		try {
+			commandExecutor2.executeCommand(verifyCommand);
 
-            String outputLine;
-            while ((outputLine = commandExecutor2.readOutputLine()) != null) {
-                if (strDeviceVerifier.equals(outputLine)) {
-                    return true;
-                }
-            }
-        } catch (IOException e) {
-            logger.error(e.getMessage(), e);
-        } finally {
-            try {
-                commandExecutor2.close();
-            } catch (IOException e) {
-                logger.error(e.getMessage(), e);
-            }
-        }
+			String outputLine;
+			while ((outputLine = commandExecutor2.readOutputLine()) != null) {
+				if (strDeviceVerifier.equals(outputLine)) {
+					return true;
+				}
+			}
+		} catch (IOException e) {
+			logger.error(e.getMessage(), e);
+		} finally {
+			try {
+				commandExecutor2.close();
+			} catch (IOException e) {
+				logger.error(e.getMessage(), e);
+			}
+		}
 
-        return false;
-    }
+		return false;
+	}
 
-    @Override
-    public List<USBStorageDevice> getRemovableDevices() {
-        ArrayList<USBStorageDevice> listDevices = new ArrayList<USBStorageDevice>();
+	@Override
+	public List<USBStorageDevice> getRemovableDevices() {
+		ArrayList<USBStorageDevice> listDevices = new ArrayList<USBStorageDevice>();
 
-        try {
-            commandExecutor1.executeCommand(linuxDetectUSBCommand1);
+		try {
+			commandExecutor1.executeCommand(linuxDetectUSBCommand1);
 
-            String outputLine;
-            while ((outputLine = commandExecutor1.readOutputLine()) != null) {
-                Matcher matcher = command1Pattern.matcher(outputLine);
+			String outputLine;
+			while ((outputLine = commandExecutor1.readOutputLine()) != null) {
+				Matcher matcher = command1Pattern.matcher(outputLine);
 
-                if (matcher.matches()) {
-                    String device = matcher.group(1);
-                    String rootPath = matcher.group(2);
+				if (matcher.matches()) {
+					String device = matcher.group(1);
+					String rootPath = matcher.group(2);
 
-                    if (isUSBStorage(device)) {
-                        addUSBDevice(listDevices, rootPath);
-                    }
-                }
-            }
+					if (isUSBStorage(device)) {
+						addUSBDevice(listDevices, rootPath);
+					}
+				}
+			}
 
-        } catch (IOException e) {
-            logger.error(e.getMessage(), e);
-        } finally {
-            try {
-                commandExecutor1.close();
-            } catch (IOException e) {
-                logger.error(e.getMessage(), e);
-            }
-        }
+		} catch (IOException e) {
+			logger.error(e.getMessage(), e);
+		} finally {
+			try {
+				commandExecutor1.close();
+			} catch (IOException e) {
+				logger.error(e.getMessage(), e);
+			}
+		}
 
-        return listDevices;
-    }
+		return listDevices;
+	}
 }

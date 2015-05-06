@@ -32,50 +32,49 @@ import java.util.regex.Pattern;
  */
 public class OSXStorageDeviceDetector extends AbstractStorageDeviceDetector {
 
-    private static final Logger logger = LoggerFactory
-            .getLogger(OSXStorageDeviceDetector.class);
+	private static final Logger logger = LoggerFactory.getLogger(OSXStorageDeviceDetector.class);
 
-    private static final String osXDetectUSBCommand = "system_profiler SPUSBDataType";
-    private static final Pattern macOSXPattern = Pattern.compile("^.*Mount Point: (.+)$");
+	private static final String osXDetectUSBCommand = "system_profiler SPUSBDataType";
+	private static final Pattern macOSXPattern = Pattern.compile("^.*Mount Point: (.+)$");
 
-    private final CommandLineExecutor commandExecutor;
+	private final CommandLineExecutor commandExecutor;
 
-    public OSXStorageDeviceDetector() {
-        super();
+	public OSXStorageDeviceDetector() {
+		super();
 
-        commandExecutor = new CommandLineExecutor();
-    }
+		commandExecutor = new CommandLineExecutor();
+	}
 
-    @Override
-    public List<USBStorageDevice> getRemovableDevices() {
-        ArrayList<USBStorageDevice> listDevices = new ArrayList<USBStorageDevice>();
+	@Override
+	public List<USBStorageDevice> getRemovableDevices() {
+		ArrayList<USBStorageDevice> listDevices = new ArrayList<USBStorageDevice>();
 
-        try {
-            /**
-             * system_profiler SPUSBDataType | grep "BSD Name:\|Mount Point:"
-             */
-            commandExecutor.executeCommand(osXDetectUSBCommand);
+		try {
+			/**
+			 * system_profiler SPUSBDataType | grep "BSD Name:\|Mount Point:"
+			 */
+			commandExecutor.executeCommand(osXDetectUSBCommand);
 
-            String outputLine;
-            
-            while ((outputLine = commandExecutor.readOutputLine()) != null) {
-                Matcher matcher = macOSXPattern.matcher(outputLine);
+			String outputLine;
 
-                if (matcher.matches()) {
-                    addUSBDevice(listDevices, matcher.group(1));
-                }
-            }
+			while ((outputLine = commandExecutor.readOutputLine()) != null) {
+				Matcher matcher = macOSXPattern.matcher(outputLine);
 
-        } catch (IOException e) {
-            logger.error(e.getMessage(), e);
-        } finally {
-            try {
-                commandExecutor.close();
-            } catch (IOException e) {
-                logger.error(e.getMessage(), e);
-            }
-        }
+				if (matcher.matches()) {
+					addUSBDevice(listDevices, matcher.group(1));
+				}
+			}
 
-        return listDevices;
-    }
+		} catch (IOException e) {
+			logger.error(e.getMessage(), e);
+		} finally {
+			try {
+				commandExecutor.close();
+			} catch (IOException e) {
+				logger.error(e.getMessage(), e);
+			}
+		}
+
+		return listDevices;
+	}
 }

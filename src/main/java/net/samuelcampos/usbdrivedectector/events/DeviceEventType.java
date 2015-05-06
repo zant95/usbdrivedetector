@@ -22,6 +22,5 @@ package net.samuelcampos.usbdrivedectector.events;
  * @author samuelcampos
  */
 public enum DeviceEventType {
-    REMOVED,
-    CONNECTED
+	REMOVED, CONNECTED
 }

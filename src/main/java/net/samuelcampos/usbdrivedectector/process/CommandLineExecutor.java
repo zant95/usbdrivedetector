@@ -29,49 +29,49 @@ import java.io.InputStreamReader;
  */
 public class CommandLineExecutor implements Closeable {
 
-    private static final Logger logger = LoggerFactory.getLogger(CommandLineExecutor.class);
+	private static final Logger logger = LoggerFactory.getLogger(CommandLineExecutor.class);
 
-    private BufferedReader input = null;
-    private Process process = null;
+	private BufferedReader input = null;
+	private Process process = null;
 
-    public void executeCommand(String command) throws IOException {
-        if (logger.isTraceEnabled()) {
-            logger.trace("Running command: " + command);
-        }
-        
-        process = Runtime.getRuntime().exec(command);
+	public void executeCommand(String command) throws IOException {
+		if (logger.isTraceEnabled()) {
+			logger.trace("Running command: " + command);
+		}
 
-        input = new BufferedReader(new InputStreamReader(process.getInputStream()));
-    }
+		process = Runtime.getRuntime().exec(command);
 
-    public String readOutputLine() throws IOException {
-        if(input == null)
-            throw new IllegalStateException("You need to call 'executeCommand' method first");
-        
-         String outputLine = input.readLine();
-         
-         if(outputLine != null)
-            return outputLine.trim();
-         
-         return null;
-    }
+		input = new BufferedReader(new InputStreamReader(process.getInputStream()));
+	}
 
-    @Override
-    public void close() throws IOException {
-        if (input != null) {
-            try {
-                input.close();
-            } catch (IOException e) {
-                logger.error(e.getMessage(), e);
-            }
-        }
+	public String readOutputLine() throws IOException {
+		if (input == null)
+			throw new IllegalStateException("You need to call 'executeCommand' method first");
 
-        if (process != null) {
-            process.destroy();
-        }
+		String outputLine = input.readLine();
 
-        input = null;
-        process = null;
-    }
+		if (outputLine != null)
+			return outputLine.trim();
+
+		return null;
+	}
+
+	@Override
+	public void close() throws IOException {
+		if (input != null) {
+			try {
+				input.close();
+			} catch (IOException e) {
+				logger.error(e.getMessage(), e);
+			}
+		}
+
+		if (process != null) {
+			process.destroy();
+		}
+
+		input = null;
+		process = null;
+	}
 
 }
